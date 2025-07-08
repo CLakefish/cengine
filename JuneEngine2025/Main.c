@@ -1,15 +1,26 @@
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
 #include "EngineManager.h"
 
-int main(void) {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#ifdef _WIN32
 
-	Engine_Init();
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
 
-	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-	_CrtDumpMemoryLeaks();
-	return 0;
-}
+	int main(void) {
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+		Engine_Init();
+
+		_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+		_CrtDumpMemoryLeaks();
+		return 0;
+	}
+
+#else
+
+	int main(void) {
+		Engine_Init();
+		return 0;
+	}
+
+#endif

@@ -23,7 +23,7 @@ double Benchmark_DifferenceMicro(const Benchmarker* marker) {
 	return Benchmark_Difference(marker) * 1000000;
 }
 
-#ifndef WIN32
+#ifdef _WIN32
 
 	#include <windows.h>
 
@@ -51,6 +51,5 @@ double Benchmark_DifferenceMicro(const Benchmarker* marker) {
 #else
 	// NOT IMPLEMENTED!
 #endif
-
 
 #endif 
