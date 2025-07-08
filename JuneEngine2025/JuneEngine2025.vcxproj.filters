@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Project Utilities">
+      <UniqueIdentifier>{f208eb56-4a76-44ed-b82b-4fd4ace41e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Benchmarking">
+      <UniqueIdentifier>{41792c59-2146-494b-ab96-57006544ce79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Dynamics">
+      <UniqueIdentifier>{b133f33e-178d-4d0c-b883-46f516a89ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Statemachine">
+      <UniqueIdentifier>{8b760d07-3c28-49c7-80b7-d41379fd5097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Trace">
+      <UniqueIdentifier>{009d58a2-c0de-4ba9-a7b4-7a9bdf73e11b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c9c8594b-1413-4037-86ad-ef6673997b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Mathematics">
+      <UniqueIdentifier>{54a706b6-4df7-4c4d-bacf-9fa96fe54c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Components">
+      <UniqueIdentifier>{3245da0b-7ed2-4a80-b9cc-8a68dd082376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Managers">
+      <UniqueIdentifier>{f3c17aa1-dcd2-488d-95c0-a658099c25e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Managers\Rendering">
+      <UniqueIdentifier>{0f6b5895-b32a-4cb9-8f46-c968511ad4c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Time">
+      <UniqueIdentifier>{4feef615-0447-499c-9ee3-d3e50196dc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Managers\Input">
+      <UniqueIdentifier>{ac443957-11d6-43d8-855d-18e2eebc8da6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\File IO">
+      <UniqueIdentifier>{f215aadf-7162-4e8a-880b-ccdab81c4cf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Utilities\Serialization">
+      <UniqueIdentifier>{f86127ec-78cb-4347-b062-57c29e20c888}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Benchmark.h">
+      <Filter>Project Utilities\Benchmarking</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicArray.h">
+      <Filter>Project Utilities\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Project Utilities\Statemachine</Filter>
+    </ClInclude>
+    <ClInclude Include="stdinc.h">
+      <Filter>Project Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Trace.h">
+      <Filter>Project Utilities\Trace</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsManager.h">
+      <Filter>Core\Managers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Project Utilities\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="EMath.h">
+      <Filter>Project Utilities\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>Project Utilities\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Core\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineManager.h">
+      <Filter>Core\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Project Utilities\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Core\Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>Project Utilities\File IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer.h">
+      <Filter>Project Utilities\Serialization</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.c" />
+    <ClCompile Include="StateMachine.c">
+      <Filter>Project Utilities\Statemachine</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsManager.c">
+      <Filter>Core\Managers\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineManager.c">
+      <Filter>Core\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libraries\glad.c">
+      <Filter>Project Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.c">
+      <Filter>Project Utilities\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Serializer.c">
+      <Filter>Project Utilities\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.c">
+      <Filter>Core\Managers\Input</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
