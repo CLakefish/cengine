@@ -13,7 +13,7 @@ typedef struct mat4x4_t {
 	float m[16];
 } mat4x4_t;
 
-inline void mat_Print(const mat4x4_t a) {
+static inline void mat_Print(const mat4x4_t a) {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			printf("%f,", a.m[(i * 4) + j]);
@@ -23,7 +23,7 @@ inline void mat_Print(const mat4x4_t a) {
 	}
 }
 
-inline mat4x4_t mat_Identity() {
+static inline mat4x4_t mat_Identity(void) {
 	mat4x4_t mat = { {0} };
 	mat.m[0] = 1;
 	mat.m[5] = 1;
@@ -33,22 +33,22 @@ inline mat4x4_t mat_Identity() {
 	return mat;
 }
  
-inline mat4x4_t mat_Perspective(float fov, float aspect, float near, float far)
+static inline mat4x4_t mat_Perspective(const float fov, const float aspect, const float zNear, const float zFar)
 {
 	mat4x4_t mat = mat_Identity();
 
 	float t = tanf(fov / 2.0f);
 	mat.m[0] = 1.0f / (aspect * t);
 	mat.m[5] = 1.0f / t;
-	mat.m[10] = -((far + near) / (far - near));
-	mat.m[11] = -((2.0f * far * near) / (far - near));
+	mat.m[10] = -((zFar + zNear) / (zFar - zNear));
+	mat.m[11] = -((2.0f * zFar * zNear) / (zFar - zNear));
 	mat.m[14] = -1;
 	mat.m[15] = 0;
 
 	return mat;
 }
 
-inline mat4x4_t mat_Multiply(const mat4x4_t a, const mat4x4_t b) {
+static inline mat4x4_t mat_Multiply(const mat4x4_t a, const mat4x4_t b) {
 	mat4x4_t mat;
 
 	for (int x = 0; x < 4; ++x) {
@@ -66,7 +66,7 @@ inline mat4x4_t mat_Multiply(const mat4x4_t a, const mat4x4_t b) {
 	return mat;
 }
 
-inline vec3_t mat_VecMultiply(const vec3_t a, const mat4x4_t b) {
+static inline vec3_t mat_VecMultiply(const vec3_t a, const mat4x4_t b) {
 	vec3_t vec;
 
 	vec.x = b.m[0] * a.x +
@@ -92,7 +92,7 @@ inline vec3_t mat_VecMultiply(const vec3_t a, const mat4x4_t b) {
 	return vec;
 }
 
-inline mat4x4_t mat_Translate(const mat4x4_t m, const vec3_t pos) {
+static inline mat4x4_t mat_Translate(const mat4x4_t m, const vec3_t pos) {
 	mat4x4_t mat = m;
 	mat.m[3] += pos.x;
 	mat.m[7] += pos.y;
@@ -100,7 +100,7 @@ inline mat4x4_t mat_Translate(const mat4x4_t m, const vec3_t pos) {
 	return mat;
 }
 
-inline mat4x4_t mat_Scale(const mat4x4_t m, const vec3_t scale) {
+static inline mat4x4_t mat_Scale(const mat4x4_t m, const vec3_t scale) {
 	mat4x4_t mat = m;
 	mat.m[0] += scale.x;
 	mat.m[5] += scale.y;
@@ -108,7 +108,7 @@ inline mat4x4_t mat_Scale(const mat4x4_t m, const vec3_t scale) {
 	return mat;
 }
 
-inline mat4x4_t mat_XRot(const mat4x4_t m, float angle) {
+static inline mat4x4_t mat_XRot(const mat4x4_t m, float angle) {
 	mat4x4_t mat = m;
 	mat.m[5] = cosf(angle);
 	mat.m[6] = -sinf(angle);
@@ -117,7 +117,7 @@ inline mat4x4_t mat_XRot(const mat4x4_t m, float angle) {
 	return mat;
 }
 
-inline mat4x4_t mat_YRot(const mat4x4_t m, float angle) {
+static inline mat4x4_t mat_YRot(const mat4x4_t m, float angle) {
 	mat4x4_t mat = m;
 	mat.m[0] = cosf(angle);
 	mat.m[2] = sinf(angle);
@@ -126,7 +126,7 @@ inline mat4x4_t mat_YRot(const mat4x4_t m, float angle) {
 	return mat;
 }
 
-inline mat4x4_t mat_ZRot(const mat4x4_t m, float angle) {
+static inline mat4x4_t mat_ZRot(const mat4x4_t m, float angle) {
 	mat4x4_t mat = m;
 	mat.m[0] = cosf(angle);
 	mat.m[1] = -sinf(angle);
@@ -135,7 +135,7 @@ inline mat4x4_t mat_ZRot(const mat4x4_t m, float angle) {
 	return mat;
 }
 
-inline mat4x4_t mat_Rot(const mat4x4_t m, const vec3_t dir) {
+static inline mat4x4_t mat_Rot(const mat4x4_t m, const vec3_t dir) {
 
 	mat4x4_t identity = mat_Identity();
 
@@ -149,7 +149,7 @@ inline mat4x4_t mat_Rot(const mat4x4_t m, const vec3_t dir) {
 	return mat_Multiply(t, m);
 }
 
-inline mat4x4_t mat_LookAt(const vec3_t pos, const vec3_t dir, const vec3_t right, const vec3_t up)
+static inline mat4x4_t mat_LookAt(const vec3_t pos, const vec3_t dir, const vec3_t right, const vec3_t up)
 {
 	mat4x4_t a = mat_Identity();
 	a.m[0] = right.x;

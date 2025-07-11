@@ -1,5 +1,8 @@
 #include "EngineManager.h"
 
+#include <signal.h>
+#include <stdio.h>
+
 #ifdef _WIN32
 
 	#define _CRTDBG_MAP_ALLOC
@@ -7,6 +10,9 @@
 	#include <crtdbg.h>
 
 	int main(void) {
+		// Doesnt work on Windows system
+		// signal(SIGTERM, Engine_Shutdown);
+
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 		Engine_Init();

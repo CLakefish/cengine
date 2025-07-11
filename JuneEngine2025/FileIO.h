@@ -6,7 +6,7 @@
 
 static char* FileToString(const char* fileName) {
 	FILE* file;
-	fopen_s(&file, fileName, "r");
+	fopen_s(&file, fileName, "rb");
 
 	if (!file) {
 		printf("Unable to open file with name %s\n", fileName);

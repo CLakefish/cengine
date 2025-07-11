@@ -43,6 +43,12 @@
     <Filter Include="Project Utilities\Serialization">
       <UniqueIdentifier>{f86127ec-78cb-4347-b062-57c29e20c888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Shaders">
+      <UniqueIdentifier>{438f313c-8496-48c0-a765-fcab857daa4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Managers\Rendering\Gizmos">
+      <UniqueIdentifier>{7bb54fbf-7434-4d0a-81f3-9ffe13d1a07d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Benchmark.h">
@@ -78,9 +84,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Core\Components</Filter>
     </ClInclude>
-    <ClInclude Include="EngineManager.h">
-      <Filter>Core\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>Project Utilities\Time</Filter>
     </ClInclude>
@@ -93,6 +96,18 @@
     <ClInclude Include="Serializer.h">
       <Filter>Project Utilities\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Core\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmo.h">
+      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GizmoRenderer.h">
+      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.c" />
@@ -101,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="GraphicsManager.c">
       <Filter>Core\Managers\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineManager.c">
-      <Filter>Core\Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\libraries\glad.c">
       <Filter>Project Utilities</Filter>
@@ -117,5 +129,25 @@
     <ClCompile Include="InputManager.c">
       <Filter>Core\Managers\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.c">
+      <Filter>Core\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmo.c">
+      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineManager.c">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GizmoRenderer.c">
+      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gizmo.frag">
+      <Filter>Core\Shaders</Filter>
+    </None>
+    <None Include="gizmo.vert">
+      <Filter>Core\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

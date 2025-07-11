@@ -55,6 +55,9 @@ void			Input_RemoveBind		(InputManager* m, int keyCode);
 input_t*		Input_KeycodeInput		(InputManager* m, int keyCode);
 input_t*		Input_NamedInput		(InputManager* m, const char* name);
 void			Input_CalculateEvents	(GLFWwindow* w, InputManager* m);
-void			Input_Check				(GLFWwindow* w, input_t* data);
+void			Input_ForceCheck		(GLFWwindow* w, input_t* data);
+
+inputBool_t Input_Bool(InputManager* m, const char* name);
+inputVec2_t Input_Vec(InputManager* m, const char* name);
 
 #endif

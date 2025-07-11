@@ -4,11 +4,12 @@
 #include <GLFW/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "GizmoRenderer.h"
 #include "Camera.h"
 
 typedef struct GraphicsManager {
 	GLFWwindow* window;
-	camera_t*   camera;
+	camera_t camera;
 } GraphicsManager;
 
 GraphicsManager* Graphics_Init			(void);
