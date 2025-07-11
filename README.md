@@ -4,9 +4,6 @@
 > [!NOTE]
 > This is a short lifespan passion project, the code quality will vary throughout the codebase depending on how much work I am willing to (and have the time to) put into certain things.
 
-## **Goals**
-- [ ] Make cool shit
-
 ## **Dependencies**
 - GLFW
 - GLAD
