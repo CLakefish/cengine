@@ -4,8 +4,7 @@
 **Dependencies**
 - GLFW
 - GLAD
-- MSVS (sorry)
+- MSVS <sub>*(sorry)*</sub>
 
-### Please Note
-This is a short passion project, the code quality will vary throughout the codebase depending on how much work I am willing to (and have the time to) put into certain things.
-
+> [!NOTE]
+> This is a short passion project, the code quality will vary throughout the codebase depending on how much work I am willing to (and have the time to) put into certain things.
