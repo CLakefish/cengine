@@ -1,5 +1,3 @@
-#include "stdinc.h"
-
 #include "Matrix4x4.h"
 #include "GraphicsManager.h"
 #include "Trace.h"
@@ -37,34 +35,39 @@ static void Graphics_CameraMovement(GraphicsManager* m) {
 	m->camera.up	  = vec3_Normalize(vec3_Cross(m->camera.right, m->camera.forward));
 
 	if (Input_Bool(engine->inputs, "W").held) {
-		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "S").held) {
-		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "A").held) {
-		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "D").held) {
-		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "space").held) {
-		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "leftShift").held) {
-		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* engine->timeManager->deltaTime);
+		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
+}
+
+static void GraphicsManager_WindowCallback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 GraphicsManager* Graphics_Init(void) {
@@ -84,6 +87,9 @@ GraphicsManager* Graphics_Init(void) {
 	m->window = wind;
 
 	glfwMakeContextCurrent(m->window);
+	glfwSwapInterval(0);
+
+	glfwSetWindowSizeCallback(m->window, GraphicsManager_WindowCallback);
 	m->camera.transform.position	= (vec3_t){ 0, 1, 0 };
 	m->camera.forward				= (vec3_t){ 0, 0, 1.0f };
 	m->camera.up					= (vec3_t){ 0, 1, 0.0f };

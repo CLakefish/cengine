@@ -88,7 +88,7 @@ void GizmoRenderer_Render(const mat4x4_t* view, const mat4x4_t* proj, const vec3
 	GizmoRenderer_GenerateGrid(pos);
 
 	glBindBuffer(GL_ARRAY_BUFFER, gizmoRenderer.grid->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.grid->count, gizmoRenderer.grid->vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.grid->count, gizmoRenderer.grid->vertices, GL_DYNAMIC_DRAW);
 	glBindVertexArray(gizmoRenderer.grid->VAO);
 	glDrawArrays(GL_LINES, 0, gizmoRenderer.grid->count);
 
@@ -143,30 +143,23 @@ void GizmoRenderer_RemoveGizmo(gizmo_t* gizmo) {
 }
 
 static void GizmoRenderer_CreateChunk(const vec3_t pos, int* index, const int x, const int z, const float xOffset, const float zOffset) {
-	vec3_t aZ = (vec3_t){ (x * GRID_SPACING) - xOffset, 0, (z * GRID_SPACING) - zOffset, 1 };
-	vec3_t bZ = (vec3_t){ (x * GRID_SPACING) - xOffset, 0, ((z + 1) * GRID_SPACING) - zOffset, 1 };
+	float xSpace = x * GRID_SPACING - xOffset;
+	float zSpaze = z * GRID_SPACING - zOffset;
 
-	//float fogA = 1.0f - (vec3_Distance(vec3_Mult(pos, -1), aZ) / GRID_FOG);
-	//float fogB = 1.0f - (vec3_Distance(vec3_Mult(pos, -1), bZ) / GRID_FOG);
-	float fogA = LERP(1.0f, 0.0f, vec3_Distance(pos, aZ) / GRID_FOG);
-	float fogB = LERP(1.0f, 0.0f, vec3_Distance(pos, bZ) / GRID_FOG);
-	vec3_t colorA = (vec3_t){ GRID_COLOR, fogA };
-	vec3_t colorB = (vec3_t){ GRID_COLOR, fogB };
+	vec3_t aZ = (vec3_t){ xSpace, 0, zSpaze, 1 };
+	vec3_t bZ = (vec3_t){ xSpace, 0, ((z + 1) * GRID_SPACING) - zOffset, 1 };
+
+	vec3_t color = (vec3_t){ GRID_COLOR };
 
 	int idx = *index;
-	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ aZ, colorA };
-	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ bZ, colorB }; // errors here
+	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ aZ, color };
+	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ bZ, color };
 
-	vec3_t aX = (vec3_t){ (x * GRID_SPACING) - xOffset,	      0, (z * GRID_SPACING) - zOffset, 1 };
-	vec3_t bX = (vec3_t){ ((x + 1) * GRID_SPACING) - xOffset, 0, (z * GRID_SPACING) - zOffset, 1 };
+	vec3_t aX = (vec3_t){ xSpace,							  0, zSpaze, 1 };
+	vec3_t bX = (vec3_t){ ((x + 1) * GRID_SPACING) - xOffset, 0, zSpaze, 1 };
 
-	fogA = LERP(1.0f, 0.0f, vec3_Distance(pos, aX) / GRID_FOG);
-	fogB = LERP(1.0f, 0.0f, vec3_Distance(pos, bX) / GRID_FOG);
-	colorA = (vec3_t){ GRID_COLOR, fogA };
-	colorB = (vec3_t){ GRID_COLOR, fogB };
-
-	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ aX, colorA };
-	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ bX, colorB };
+	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ aX, color };
+	gizmoRenderer.grid->vertices[idx++] = (gizmoVertex_t){ bX, color };
 
 	*index = idx;
 }

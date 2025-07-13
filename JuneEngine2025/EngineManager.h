@@ -14,12 +14,9 @@
 
 typedef struct EngineManager {
 	GraphicsManager* graphicsManager;
-	TimeManager*	 timeManager;
 	InputManager*	 inputs;
 
 	Serializer*		 serializer;
-
-	int	debugMode;
 } EngineManager;
 
 EngineManager* Engine_GetInstance	(void);

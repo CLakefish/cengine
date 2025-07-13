@@ -95,7 +95,7 @@ gizmo_t* Gizmo_CreateBox(const vec3_t position, const vec3_t scale, const vec3_t
 
 	l->transform = (transform_t){position, (vec3_t) { 0,0,0,0 }, scale};
 
-	vec3_t color    = (vec3_t){ desiredColor.x, desiredColor.y, desiredColor.z, desiredColor.w == 0 ? 1 : desiredColor.w };
+	vec3_t color = (vec3_t){ desiredColor.x, desiredColor.y, desiredColor.z, desiredColor.w == 0 ? 1 : desiredColor.w };
 
 	memcpy(l->vertices, cubeVertices, sizeof(gizmoVertex_t) * 24);
 	for (int i = 0; i < 24; ++i) l->vertices[i].color = color;

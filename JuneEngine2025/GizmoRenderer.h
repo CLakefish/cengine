@@ -4,11 +4,11 @@
 #include "Gizmo.h"
 #include "Shader.h"
 
-#define GRID_WIDTH 100
-#define GRID_LENGTH 100
+#define GRID_WIDTH 55
+#define GRID_LENGTH 55
 #define GRID_SPACING 15.0f
 #define GRID_FOG 450.0f
-#define GRID_COLOR 0.4f, 0.5f, 0.5f
+#define GRID_COLOR 1, 1, 1, 0.25
 
 typedef struct GizmoRenderer {
 	gizmo_t** gizmos;

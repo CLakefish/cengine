@@ -1,6 +1,5 @@
 #include "EngineManager.h"
 
-#include <signal.h>
 #include <stdio.h>
 
 #ifdef _WIN32
@@ -10,7 +9,7 @@
 	#include <crtdbg.h>
 
 	int main(void) {
-		// Doesnt work on Windows system
+		// Doesnt work on Windows system or w/C
 		// signal(SIGTERM, Engine_Shutdown);
 
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

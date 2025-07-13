@@ -12,8 +12,9 @@ typedef struct TimeManager {
 	float lastFrame;
 } TimeManager;
 
-TimeManager* Time_Init		(void);
-void		 Time_Calculate	(TimeManager* t);
-void		 Time_Shutdown  (TimeManager* t);
+extern TimeManager timeManager;
+
+void Time_Init		(void);
+void Time_Calculate	(void);
 
 #endif

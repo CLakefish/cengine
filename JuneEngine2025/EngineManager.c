@@ -4,9 +4,6 @@
 
 static EngineManager manager;
 
-gizmo_t* gizmo;
-gizmo_t* gizmo2;
-
 EngineManager* Engine_GetInstance(void) {
 	return &manager;
 }
@@ -19,11 +16,11 @@ void Engine_Init(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	Benchmark_Init();
+	Time_Init();
 	Trace_Init(TR_INIT_PRINT);
 
 	manager.graphicsManager = Graphics_Init();
 	manager.serializer		= Serializer_Init("engineSerialized.bin", NULL);
-	manager.timeManager		= Time_Init();
 	manager.inputs			= Input_Init();
 
 	Input_AddBind(manager.inputs, "mouse",		GLFW_MOUSE_BUTTON_1,	IT_MOUSE);
@@ -50,17 +47,19 @@ void Engine_Init(void)
 
 	GizmoRenderer_Init();
 
-	gizmo = Gizmo_CreateLine((vec3_t) { 0, 0, 0 }, (vec3_t) {0,10,10}, (vec3_t) {0,1,1});
-	GizmoRenderer_AddGizmo(gizmo);
-	gizmo2 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 10, 10, 10 }, (vec3_t) { 1, 0, 1 });
-	GizmoRenderer_AddGizmo(gizmo2);
+	//gizmo_t* gizmo;
+	//gizmo_t* gizmo2;
+	//gizmo = Gizmo_CreateLine((vec3_t) { 0, 0, 0 }, (vec3_t) {0,10,10}, (vec3_t) {0,1,1});
+	//GizmoRenderer_AddGizmo(gizmo);
+	//gizmo2 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 10, 10, 10 }, (vec3_t) { 1, 0, 1 });
+	//GizmoRenderer_AddGizmo(gizmo2);
 
 	Engine_Run();
 }
 
 void Engine_Run(void) 
 {
-	int total = 50;
+	int total = 25;
 	for (float i = -total; i <= total; ++i) {
 		for (float j = -total; j <= total; ++j) {
 			GizmoRenderer_AddGizmo(Gizmo_CreateBox((vec3_t) { i + 45, (i * i) / (j * j), j }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 1, 1, 0.1f }));
@@ -79,11 +78,16 @@ void Engine_Run(void)
 			Input_NamedInput(manager.inputs, "mousePos")->disabled = disabled;
 		}
 
-		gizmo2->transform.position = (vec3_t){ 0, sinf(manager.timeManager->time), 0 };
-		gizmo2->transform.rotation = (vec3_t){ 0, gizmo2->transform.rotation.y + manager.timeManager->deltaTime, 0 };
+		Time_Calculate();
 
-		Time_Calculate(manager.timeManager);
+		Benchmarker b;
+		Benchmark_Init();
+		Benchmark_Start(&b);
+
 		Graphics_Render(manager.graphicsManager);
+
+		Benchmark_End(&b);
+		printf("Time in ms: %f. Total time: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
 
 		glfwSwapBuffers(manager.graphicsManager->window);
 	}
@@ -96,7 +100,6 @@ void Engine_Shutdown(void)
 	Input_Save(manager.inputs);
 
 	Input_Shutdown(manager.inputs);
-	Time_Shutdown(manager.timeManager);
 
 	Graphics_Shutdown(manager.graphicsManager);
 	GizmoRenderer_Shutdown();
