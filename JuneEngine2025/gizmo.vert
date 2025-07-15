@@ -13,7 +13,7 @@ uniform float fogDist;
 
 float GetFogAlpha(float alpha)
 {
-	float dist = distance(vec4(camPos, 1), gl_Position);
+	float dist = distance(vec4(camPos.x, 0, camPos.z, 1), gl_Position);
 	float lerpVal = mix(alpha, 0, dist / fogDist);
 	return lerpVal;
 };

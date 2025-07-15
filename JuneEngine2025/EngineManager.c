@@ -57,7 +57,7 @@ void Engine_Init(void)
 
 void Engine_Run(void) 
 {
-	int total = 50;
+	float total = 25;
 	for (float i = -total; i <= total; ++i) {
 		for (float j = -total; j <= total; ++j) {
 			GizmoRenderer_AddGizmo(Gizmo_CreateBox((vec3_t) { i + 45, (i * i) / (j * j), j }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 1, 1, 0.1f }));
@@ -95,15 +95,12 @@ void Engine_Run(void)
 void Engine_Shutdown(void) 
 {
 	Input_Save(manager.inputs);
-
 	Input_Shutdown(manager.inputs);
-
 	Graphics_Shutdown(manager.graphicsManager);
 	GizmoRenderer_Shutdown();
 
 	Serializer_Destroy(manager.serializer);
 
 	Trace_Shutdown();
-
 	glfwTerminate();
 }
