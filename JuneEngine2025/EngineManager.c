@@ -8,6 +8,8 @@ EngineManager* Engine_GetInstance(void) {
 	return &manager;
 }
 
+gizmo_t* gizmo3;
+
 void Engine_Init(void) 
 {
 	glfwInit();
@@ -47,19 +49,15 @@ void Engine_Init(void)
 
 	GizmoRenderer_Init();
 
-	//gizmo_t* gizmo;
-	//gizmo_t* gizmo2;
-	//gizmo = Gizmo_CreateLine((vec3_t) { 0, 0, 0 }, (vec3_t) {0,10,10}, (vec3_t) {0,1,1});
-	//GizmoRenderer_AddGizmo(gizmo);
-	//gizmo2 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 10, 10, 10 }, (vec3_t) { 1, 0, 1 });
-	//GizmoRenderer_AddGizmo(gizmo2);
+	gizmo3 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 0, 1, 1 });
+	GizmoRenderer_AddGizmo(gizmo3);
 
 	Engine_Run();
 }
 
 void Engine_Run(void) 
 {
-	int total = 25;
+	int total = 50;
 	for (float i = -total; i <= total; ++i) {
 		for (float j = -total; j <= total; ++j) {
 			GizmoRenderer_AddGizmo(Gizmo_CreateBox((vec3_t) { i + 45, (i * i) / (j * j), j }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 1, 1, 0.1f }));
@@ -78,8 +76,6 @@ void Engine_Run(void)
 			Input_NamedInput(manager.inputs, "mousePos")->disabled = disabled;
 		}
 
-		Time_Calculate();
-
 		Benchmarker b;
 		Benchmark_Init();
 		Benchmark_Start(&b);
@@ -89,6 +85,7 @@ void Engine_Run(void)
 		Benchmark_End(&b);
 		printf("Time in ms: %f. Total time: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
 
+		Time_Calculate();
 		glfwSwapBuffers(manager.graphicsManager->window);
 	}
 

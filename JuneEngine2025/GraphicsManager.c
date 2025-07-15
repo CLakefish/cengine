@@ -6,7 +6,7 @@
 #include "InputManager.h"
 
 float pitch, yaw = 90;
-float moveSpeed = 10;
+float moveSpeed = 25;
 
 static void Graphics_CameraMovement(GraphicsManager* m) {
 	EngineManager* engine = Engine_GetInstance();
@@ -122,7 +122,7 @@ void Graphics_Render(GraphicsManager* m) {
 	glfwGetWindowSize(m->window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
 
-	mat4x4_t proj = mat_Perspective(m->camera.FOV * DEG2RAD, aspectRatio, m->camera.nearPlane, m->camera.farPlane);
+	mat4x4_t proj = mat_Perspective(m->camera.FOV, aspectRatio, m->camera.nearPlane, m->camera.farPlane);
 	mat4x4_t view = mat_LookAt     (m->camera.transform.position, m->camera.forward, m->camera.right, m->camera.up);
 
 	Graphics_CameraMovement(m);

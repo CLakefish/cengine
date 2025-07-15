@@ -37,8 +37,8 @@ void Gizmo_Bind(gizmo_t* l) {
 	glGenBuffers(1, &l->VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, l->VBO);
 
-	// Might be wrong...
-	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * l->count, l->vertices, GL_STATIC_DRAW);
+	// Might be wrong...ds
+	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * l->count, l->vertices, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(gizmoVertex_t), (void*)0);
 	glEnableVertexAttribArray(0);

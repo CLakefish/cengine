@@ -7,9 +7,19 @@ flat out vec4 color;
 uniform mat4 view;
 uniform mat4 proj;
 uniform mat4 model;
+uniform vec3 camPos;
+
+uniform float fogDist;
+
+float GetFogAlpha(float alpha)
+{
+	float dist = distance(vec4(camPos, 1), gl_Position);
+	float lerpVal = mix(alpha, 0, dist / fogDist);
+	return lerpVal;
+};
 
 void main()
 {
-   color = aCol;
    gl_Position = proj * view * model * vec4(aPos, 1.0);
+   color = new vec4(aCol.x, aCol.y, aCol.z, GetFogAlpha(aCol.w));
 };

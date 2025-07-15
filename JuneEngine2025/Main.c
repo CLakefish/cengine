@@ -4,6 +4,22 @@
 
 #ifdef _WIN32
 
+//#define DA_COMMON_TYPES
+//#include "DynamicArray.h"
+//
+//DAint i;
+//DAint_Init(&i, 10);
+//
+//for (int j = 0; j < 10; ++j) {
+//	DAint_Push(&i, j);
+//}
+//
+//for (int j = 0; j < 10; ++j) {
+//	printf("%i\n", i.data[j]);
+//}
+//
+//DAint_Free(&i);
+
 	#define _CRTDBG_MAP_ALLOC
 	#include <stdlib.h>
 	#include <crtdbg.h>

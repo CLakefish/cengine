@@ -37,11 +37,12 @@ static inline mat4x4_t mat_Perspective(const float fov, const float aspect, cons
 {
 	mat4x4_t mat = mat_Identity();
 
-	float t = tanf(fov / 2.0f);
+	float t = tanf((fov / 2.0f) * DEG2RAD);
+
 	mat.m[0] = 1.0f / (aspect * t);
 	mat.m[5] = 1.0f / t;
-	mat.m[10] = -((zFar + zNear) / (zFar - zNear));
-	mat.m[11] = -((2.0f * zFar * zNear) / (zFar - zNear));
+	mat.m[10] = -(zFar + zNear) / (zFar - zNear);
+	mat.m[11] = -(2.0f * zFar * zNear) / (zFar - zNear);
 	mat.m[14] = -1;
 	mat.m[15] = 0;
 
@@ -105,6 +106,7 @@ static inline mat4x4_t mat_Scale(const mat4x4_t m, const vec3_t scale) {
 	mat.m[0] += scale.x;
 	mat.m[5] += scale.y;
 	mat.m[10] += scale.z;
+	mat.m[15] += scale.w;
 	return mat;
 }
 

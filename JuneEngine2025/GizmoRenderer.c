@@ -1,6 +1,7 @@
 #include "GizmoRenderer.h"
 #include "FileIO.h"
 #include "Matrix4x4.h"
+#include "TimeManager.h"
 
 #include <string.h>
 
@@ -21,6 +22,22 @@ static void GizmoRenderer_Expand(void) {
 	gizmoRenderer.gizmos = g;
 }
 
+static void GizmoRenderer_RenderGrid(const vec3_t pos) {
+	float totalSpace = GRID_SPACING * 2.0f;
+	gizmoRenderer.grid->transform.position = (vec3_t){ (int)(pos.x / totalSpace) * totalSpace, 0, (int)(pos.z / totalSpace) * totalSpace };
+
+	mat4x4_t model = mat_Identity();
+	model = mat_Scale(model, gizmoRenderer.grid->transform.scale);
+	model = mat_Rot(model, gizmoRenderer.grid->transform.rotation);
+	model = mat_Translate(model, gizmoRenderer.grid->transform.position);
+
+	Shader_SetVec3(gizmoRenderer.shader, "camPos", &(vec3_t){0, 0, 0});
+	Shader_SetMat4(gizmoRenderer.shader, "model", &model);
+
+	glBindVertexArray(gizmoRenderer.grid->VAO);
+	glDrawArrays(GL_LINES, 0, gizmoRenderer.grid->count);
+}
+
 void GizmoRenderer_Init(void) {
 	gizmoRenderer.gizmos = (gizmo_t**)calloc(1, sizeof(gizmo_t*));
 
@@ -32,8 +49,19 @@ void GizmoRenderer_Init(void) {
 	gizmoRenderer.capacity = 1;
 	gizmoRenderer.count	   = 0;
 
-	gizmoRenderer.shader = Shader_Init(FileToString("gizmo.vert"), FileToString("gizmo.frag"));
+	// Directional lines
+	int dirInd = 6;
+	gizmoRenderer.dirRef = (gizmo_t*)malloc(sizeof(gizmo_t));
+	gizmoRenderer.dirRef->vertices = (gizmoVertex_t*)calloc(dirInd, sizeof(gizmoVertex_t));
+	gizmoRenderer.dirRef->count = dirInd;
+	gizmoRenderer.dirRef->transform = (transform_t){ {0},{0},{1,1,1,1} };
+	gizmoRenderer.dirRef->render = 1;
 
+	Gizmo_Bind(gizmoRenderer.dirRef);
+	GizmoRenderer_GenerateDir((vec3_t){0});
+	GizmoRenderer_AddGizmo(gizmoRenderer.dirRef);
+
+	// Infinte grid
 	int cell = GRID_WIDTH * GRID_LENGTH;
 	int inds = cell * 4;
 
@@ -46,7 +74,12 @@ void GizmoRenderer_Init(void) {
 	}
 
 	gizmoRenderer.grid->count = inds;
+	gizmoRenderer.grid->transform = (transform_t){ (vec3_t){0}, (vec3_t) {0}, (vec3_t) {1,1,1,1} };
 	Gizmo_Bind(gizmoRenderer.grid);
+	GizmoRenderer_GenerateGrid((vec3_t){0,0,0});
+
+	// Shader
+	gizmoRenderer.shader = Shader_Init(FileToString("gizmo.vert"), FileToString("gizmo.frag"));
 }
 /// <summary>
 /// This has the funny 6001 in it :(
@@ -81,16 +114,16 @@ void GizmoRenderer_Render(const mat4x4_t* view, const mat4x4_t* proj, const vec3
 
 	Shader_SetMat4(gizmoRenderer.shader, "view", view);
 	Shader_SetMat4(gizmoRenderer.shader, "proj", proj);
+	Shader_SetFloat(gizmoRenderer.shader, "fogDist", GRID_FOG);
 
-	mat4x4_t id = mat_Identity();
-	Shader_SetMat4(gizmoRenderer.shader, "model", &id);
+	GizmoRenderer_RenderGrid(pos);
 
-	GizmoRenderer_GenerateGrid(pos);
+	Shader_SetFloat(gizmoRenderer.shader, "fogDist", 1000000);
+	Shader_SetVec3(gizmoRenderer.shader, "camPos", &pos);
 
-	glBindBuffer(GL_ARRAY_BUFFER, gizmoRenderer.grid->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.grid->count, gizmoRenderer.grid->vertices, GL_DYNAMIC_DRAW);
-	glBindVertexArray(gizmoRenderer.grid->VAO);
-	glDrawArrays(GL_LINES, 0, gizmoRenderer.grid->count);
+	glDisable(GL_DEPTH_TEST);
+
+	GizmoRenderer_GenerateDir(pos);
 
 	for (int i = 0; i < gizmoRenderer.count; ++i) {
 		gizmo_t* gizmo = gizmoRenderer.gizmos[i];
@@ -108,6 +141,8 @@ void GizmoRenderer_Render(const mat4x4_t* view, const mat4x4_t* proj, const vec3
 		glBindVertexArray(gizmo->VAO);
 		glDrawArrays(GL_LINES, 0, gizmo->count);
 	}
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 // NEEDS TO BE FIXED :)
@@ -164,9 +199,25 @@ static void GizmoRenderer_CreateChunk(const vec3_t pos, int* index, const int x,
 	*index = idx;
 }
 
+void GizmoRenderer_GenerateDir(const vec3_t position) {
+	float spacing = 5000;
+
+	gizmoRenderer.dirRef->vertices[0] = (gizmoVertex_t){ {position.x + spacing, 0, 0,1}, {1,0,0,1} };
+	gizmoRenderer.dirRef->vertices[1] = (gizmoVertex_t){ {position.x - spacing, 0, 0,1}, {1,0,0,1} };
+
+	gizmoRenderer.dirRef->vertices[2] = (gizmoVertex_t){ {0, 0, position.z - spacing}, {0,0,1,1} };
+	gizmoRenderer.dirRef->vertices[3] = (gizmoVertex_t){ {0, 0, position.z + spacing}, {0,0,1,1} };
+
+	gizmoRenderer.dirRef->vertices[4] = (gizmoVertex_t){ {0, position.y - spacing, 0}, {0,1,0,1} };
+	gizmoRenderer.dirRef->vertices[5] = (gizmoVertex_t){ {0, position.y + spacing, 0}, {0,1,0,1} };
+
+	glBindBuffer(GL_ARRAY_BUFFER, gizmoRenderer.dirRef->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.dirRef->count, gizmoRenderer.dirRef->vertices, GL_DYNAMIC_DRAW);
+}
+
 void GizmoRenderer_GenerateGrid(vec3_t pos) {
-	float xOffset  = (int)(pos.x / GRID_SPACING) * GRID_SPACING;
-	float zOffset  = (int)(pos.z / GRID_SPACING) * GRID_SPACING;
+	float xOffset  = (int)(-pos.x / GRID_SPACING) * GRID_SPACING;
+	float zOffset  = (int)(-pos.z / GRID_SPACING) * GRID_SPACING;
 
 	int halfWidth  = (int)(GRID_WIDTH / 2.0f);
 	int halfLength = (int)(GRID_LENGTH / 2.0f);
@@ -179,4 +230,7 @@ void GizmoRenderer_GenerateGrid(vec3_t pos) {
 			GizmoRenderer_CreateChunk(scaledPos, &index, x, z, xOffset, zOffset);
 		}
 	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, gizmoRenderer.grid->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.grid->count, gizmoRenderer.grid->vertices, GL_DYNAMIC_DRAW);
 }
