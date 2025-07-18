@@ -2,6 +2,12 @@
 #include "Benchmark.h"
 #include "EngineManager.h"
 
+#include "EntityManager.h"
+
+#include "DynamicArray.h"
+
+GEN_DYNAMIC_ARRAY_TYPE(theThing, int)
+
 static EngineManager manager;
 
 EngineManager* Engine_GetInstance(void) {
@@ -25,16 +31,7 @@ void Engine_Init(void)
 	manager.serializer		= Serializer_Init("engineSerialized.bin", NULL);
 	manager.inputs			= Input_Init();
 
-	Input_AddBind(manager.inputs, "mouse",		GLFW_MOUSE_BUTTON_1,	IT_MOUSE);
-	Input_AddBind(manager.inputs, "mousePos",	-1,						IT_MOUSEVEC);
-	Input_AddBind(manager.inputs, "escape",		GLFW_KEY_ESCAPE,		IT_KEY);
-	Input_AddBind(manager.inputs, "W",			GLFW_KEY_W,				IT_KEY);
-	Input_AddBind(manager.inputs, "A",			GLFW_KEY_A,				IT_KEY);
-	Input_AddBind(manager.inputs, "S",			GLFW_KEY_S,				IT_KEY);
-	Input_AddBind(manager.inputs, "D",			GLFW_KEY_D,				IT_KEY);
-	Input_AddBind(manager.inputs, "space",		GLFW_KEY_SPACE,			IT_KEY);
-	Input_AddBind(manager.inputs, "leftShift",	GLFW_KEY_LEFT_SHIFT,	IT_KEY);
-	Input_AddBind(manager.inputs, "tab",		GLFW_KEY_TAB,			IT_KEY);
+	EntityManager_Init();
 
 	Input_Load(manager.inputs);
 
@@ -46,7 +43,6 @@ void Engine_Init(void)
 	}
 
 	Graphics_SetupGLAD();
-
 	GizmoRenderer_Init();
 
 	gizmo3 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 0, 1, 1 });
@@ -57,14 +53,11 @@ void Engine_Init(void)
 
 void Engine_Run(void) 
 {
-	float total = 25;
-	for (float i = -total; i <= total; ++i) {
-		for (float j = -total; j <= total; ++j) {
-			GizmoRenderer_AddGizmo(Gizmo_CreateBox((vec3_t) { i + 45, (i * i) / (j * j), j }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 1, 1, 0.1f }));
-		}
-	}
-
 	while (!glfwWindowShouldClose(manager.graphicsManager->window)) {
+		Benchmarker b;
+		Benchmark_Init();
+		Benchmark_Start(&b);
+
 		glfwPollEvents();
 		Input_CalculateEvents(manager.graphicsManager->window, manager.inputs);
 
@@ -76,17 +69,15 @@ void Engine_Run(void)
 			Input_NamedInput(manager.inputs, "mousePos")->disabled = disabled;
 		}
 
-		Benchmarker b;
-		Benchmark_Init();
-		Benchmark_Start(&b);
+		gizmo3->transform.rotation = vec3_Add(gizmo3->transform.rotation, vec3_Mult((vec3_t) { 2, 1, 3 }, timeManager.deltaTime));
 
 		Graphics_Render(manager.graphicsManager);
 
-		Benchmark_End(&b);
-		printf("Time in ms: %f. Total time: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
-
 		Time_Calculate();
 		glfwSwapBuffers(manager.graphicsManager->window);
+
+		Benchmark_End(&b);
+		printf("Time in ms: %f. Total time: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
 	}
 
 	Engine_Shutdown();
@@ -96,8 +87,9 @@ void Engine_Shutdown(void)
 {
 	Input_Save(manager.inputs);
 	Input_Shutdown(manager.inputs);
+
+	EntityManager_Shutdown();
 	Graphics_Shutdown(manager.graphicsManager);
-	GizmoRenderer_Shutdown();
 
 	Serializer_Destroy(manager.serializer);
 

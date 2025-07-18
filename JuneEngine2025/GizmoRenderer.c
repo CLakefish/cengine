@@ -31,7 +31,6 @@ static void GizmoRenderer_RenderGrid(const vec3_t pos) {
 	model = mat_Rot(model, gizmoRenderer.grid->transform.rotation);
 	model = mat_Translate(model, gizmoRenderer.grid->transform.position);
 
-	Shader_SetVec3(gizmoRenderer.shader, "camPos", &(vec3_t){0, 0, 0});
 	Shader_SetMat4(gizmoRenderer.shader, "model", &model);
 
 	glBindVertexArray(gizmoRenderer.grid->VAO);
@@ -81,10 +80,7 @@ void GizmoRenderer_Init(void) {
 	// Shader
 	gizmoRenderer.shader = Shader_Init(FileToString("gizmo.vert"), FileToString("gizmo.frag"));
 }
-/// <summary>
-/// This has the funny 6001 in it :(
-/// </summary>
-/// <param name=""></param>
+
 void GizmoRenderer_Shutdown(void) {
 	Shader_Clear(gizmoRenderer.shader);
 
@@ -93,16 +89,17 @@ void GizmoRenderer_Shutdown(void) {
 
 	for (int i = 0; i < gizmoRenderer.count; ++i) {
 		gizmo_t* g = gizmoRenderer.gizmos[i];
+		if (g == NULL) continue;
 
 		glDeleteVertexArrays(1, &g->VAO); 
 		glDeleteBuffers(1, &g->VBO);
 
 		// MSVC wrongly reports this as using uninitialised variables.
 		// sHUT UP MSVC IM GONNA KILL YOU ISTG
-		#pragma warning(push)
-		#pragma warning(disable: 6001)
+		//#pragma warning(push)
+		//#pragma warning(disable: 6001)
+		//#pragma warning(pop)
 		free(g->vertices); 
-		#pragma warning(pop)
 		free(g);
 	}
 
@@ -114,7 +111,12 @@ void GizmoRenderer_Render(const mat4x4_t* view, const mat4x4_t* proj, const vec3
 
 	Shader_SetMat4(gizmoRenderer.shader, "view", view);
 	Shader_SetMat4(gizmoRenderer.shader, "proj", proj);
+
+	// Render grid out specifically.
+	// I treat it as if the camera always at 0,0,0 and just move it to where the player is currently located
+	// This is so I dont need to regenerate the grid at runtime.
 	Shader_SetFloat(gizmoRenderer.shader, "fogDist", GRID_FOG);
+	Shader_SetVec3(gizmoRenderer.shader, "camPos", &(vec3_t){0, 0, 0});
 
 	GizmoRenderer_RenderGrid(pos);
 
@@ -200,16 +202,14 @@ static void GizmoRenderer_CreateChunk(const vec3_t pos, int* index, const int x,
 }
 
 void GizmoRenderer_GenerateDir(const vec3_t position) {
-	float spacing = 5000;
+	gizmoRenderer.dirRef->vertices[0] = (gizmoVertex_t){ {position.x + DIR_SPACING, 0, 0,1}, {1,0,0,1} };
+	gizmoRenderer.dirRef->vertices[1] = (gizmoVertex_t){ {position.x - DIR_SPACING, 0, 0,1}, {1,0,0,1} };
 
-	gizmoRenderer.dirRef->vertices[0] = (gizmoVertex_t){ {position.x + spacing, 0, 0,1}, {1,0,0,1} };
-	gizmoRenderer.dirRef->vertices[1] = (gizmoVertex_t){ {position.x - spacing, 0, 0,1}, {1,0,0,1} };
+	gizmoRenderer.dirRef->vertices[2] = (gizmoVertex_t){ {0, 0, position.z - DIR_SPACING}, {0,0,1,1} };
+	gizmoRenderer.dirRef->vertices[3] = (gizmoVertex_t){ {0, 0, position.z + DIR_SPACING}, {0,0,1,1} };
 
-	gizmoRenderer.dirRef->vertices[2] = (gizmoVertex_t){ {0, 0, position.z - spacing}, {0,0,1,1} };
-	gizmoRenderer.dirRef->vertices[3] = (gizmoVertex_t){ {0, 0, position.z + spacing}, {0,0,1,1} };
-
-	gizmoRenderer.dirRef->vertices[4] = (gizmoVertex_t){ {0, position.y - spacing, 0}, {0,1,0,1} };
-	gizmoRenderer.dirRef->vertices[5] = (gizmoVertex_t){ {0, position.y + spacing, 0}, {0,1,0,1} };
+	gizmoRenderer.dirRef->vertices[4] = (gizmoVertex_t){ {0, position.y - DIR_SPACING, 0}, {0,1,0,1} };
+	gizmoRenderer.dirRef->vertices[5] = (gizmoVertex_t){ {0, position.y + DIR_SPACING, 0}, {0,1,0,1} };
 
 	glBindBuffer(GL_ARRAY_BUFFER, gizmoRenderer.dirRef->VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(gizmoVertex_t) * gizmoRenderer.dirRef->count, gizmoRenderer.dirRef->vertices, GL_DYNAMIC_DRAW);

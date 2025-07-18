@@ -1,6 +1,19 @@
 #include "InputManager.h"
 #include <ctype.h>
 
+static void Input_AddStandard(InputManager* inputs) {
+	Input_AddBind(inputs, "mouse", GLFW_MOUSE_BUTTON_1, IT_MOUSE);
+	Input_AddBind(inputs, "mousePos", -1, IT_MOUSEVEC);
+	Input_AddBind(inputs, "escape", GLFW_KEY_ESCAPE, IT_KEY);
+	Input_AddBind(inputs, "W", GLFW_KEY_W, IT_KEY);
+	Input_AddBind(inputs, "A", GLFW_KEY_A, IT_KEY);
+	Input_AddBind(inputs, "S", GLFW_KEY_S, IT_KEY);
+	Input_AddBind(inputs, "D", GLFW_KEY_D, IT_KEY);
+	Input_AddBind(inputs, "space", GLFW_KEY_SPACE, IT_KEY);
+	Input_AddBind(inputs, "leftShift", GLFW_KEY_LEFT_SHIFT, IT_KEY);
+	Input_AddBind(inputs, "tab", GLFW_KEY_TAB, IT_KEY);
+}
+
 static int strnccmp(const char* a, const char* b) {
 	while (*b) {
 		int d = tolower(*a) - tolower(*b);
@@ -239,6 +252,7 @@ void Input_Save(InputManager* m) {
 }
 
 void Input_Load(InputManager* m) {
+	Input_AddStandard(m);
 	Serializer_Load(m->serializer);
 }
 

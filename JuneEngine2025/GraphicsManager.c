@@ -135,4 +135,6 @@ void Graphics_Shutdown(GraphicsManager* m) {
 	m->window = NULL;
 
 	free(m);
+
+	GizmoRenderer_Shutdown();
 }

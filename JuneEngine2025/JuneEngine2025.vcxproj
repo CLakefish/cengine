@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EngineManager.c" />
+    <ClCompile Include="EntityManager.c" />
     <ClCompile Include="Gizmo.c" />
     <ClCompile Include="GizmoRenderer.c" />
     <ClCompile Include="GraphicsManager.c" />
@@ -169,6 +170,8 @@
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="EngineManager.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="Gizmo.h" />
     <ClInclude Include="GizmoRenderer.h" />
