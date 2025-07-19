@@ -6,8 +6,6 @@
 
 #include "DynamicArray.h"
 
-GEN_DYNAMIC_ARRAY_TYPE(theThing, int)
-
 static EngineManager manager;
 
 EngineManager* Engine_GetInstance(void) {

@@ -21,5 +21,5 @@ float GetFogAlpha(float alpha)
 void main(void)
 {
    gl_Position = proj * view * model * vec4(aPos, 1.0);
-   color = new vec4(aCol.x, aCol.y, aCol.z, GetFogAlpha(aCol.w));
+   color = vec4(aCol.x, aCol.y, aCol.z, GetFogAlpha(aCol.w));
 };
