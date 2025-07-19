@@ -52,10 +52,6 @@ void Engine_Init(void)
 void Engine_Run(void) 
 {
 	while (!glfwWindowShouldClose(manager.graphicsManager->window)) {
-		Benchmarker b;
-		Benchmark_Init();
-		Benchmark_Start(&b);
-
 		glfwPollEvents();
 		Input_CalculateEvents(manager.graphicsManager->window, manager.inputs);
 
@@ -69,13 +65,17 @@ void Engine_Run(void)
 
 		gizmo3->transform.rotation = vec3_Add(gizmo3->transform.rotation, vec3_Mult((vec3_t) { 2, 1, 3 }, timeManager.deltaTime));
 
+		Benchmarker b;
+		Benchmark_Init();
+		Benchmark_Start(&b);
+
 		Graphics_Render(manager.graphicsManager);
+
+		Benchmark_End(&b);
+		printf("Time in ms for rendering: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
 
 		Time_Calculate();
 		glfwSwapBuffers(manager.graphicsManager->window);
-
-		Benchmark_End(&b);
-		printf("Time in ms: %f. Total time: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
 	}
 
 	Engine_Shutdown();
