@@ -7,7 +7,7 @@
 
 TimeManager timeManager;
 
-void Time_Init(void) 
+void Time_Init(void)
 {
 	timeManager = (TimeManager){ 1,0,0,0,0,0 };
 }
@@ -16,9 +16,9 @@ void Time_Calculate(void) {
 	float current = (float)glfwGetTime();
 
 	timeManager.unscaledDeltaTime = (current - timeManager.lastFrame);
-	timeManager.deltaTime		  = timeManager.unscaledDeltaTime * timeManager.timeScale;
+	timeManager.deltaTime = timeManager.unscaledDeltaTime * timeManager.timeScale;
 
-	timeManager.unscaledTime  += timeManager.unscaledDeltaTime;
-	timeManager.time		  += timeManager.deltaTime;
-	timeManager.lastFrame	   = current;
+	timeManager.unscaledTime += timeManager.unscaledDeltaTime;
+	timeManager.time += timeManager.deltaTime;
+	timeManager.lastFrame = current;
 }

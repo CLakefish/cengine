@@ -161,5 +161,8 @@
     <None Include="gizmo.vert">
       <Filter>Core\Shaders</Filter>
     </None>
+    <None Include="gizmoInstance.vert">
+      <Filter>Core\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

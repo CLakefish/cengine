@@ -220,7 +220,7 @@ InputManager* Input_Init(void) {
 	}
 
 	m->capacity = 1;
-	m->count    = 0;
+	m->count = 0;
 
 	m->inputs = (input_t*)calloc(1, sizeof(input_t));
 

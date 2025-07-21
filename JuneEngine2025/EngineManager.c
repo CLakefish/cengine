@@ -14,7 +14,7 @@ EngineManager* Engine_GetInstance(void) {
 
 gizmo_t* gizmo3;
 
-void Engine_Init(void) 
+void Engine_Init(void)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -26,8 +26,8 @@ void Engine_Init(void)
 	Trace_Init(TR_INIT_PRINT);
 
 	manager.graphicsManager = Graphics_Init();
-	manager.serializer		= Serializer_Init("engineSerialized.bin", NULL);
-	manager.inputs			= Input_Init();
+	manager.serializer = Serializer_Init("engineSerialized.bin", NULL);
+	manager.inputs = Input_Init();
 
 	EntityManager_Init();
 
@@ -49,7 +49,7 @@ void Engine_Init(void)
 	Engine_Run();
 }
 
-void Engine_Run(void) 
+void Engine_Run(void)
 {
 	while (!glfwWindowShouldClose(manager.graphicsManager->window)) {
 		glfwPollEvents();
@@ -72,7 +72,7 @@ void Engine_Run(void)
 		Graphics_Render(manager.graphicsManager);
 
 		Benchmark_End(&b);
-		printf("Time in ms for rendering: %f\n", Benchmark_Difference(&b) * 1000, timeManager.time);
+		printf("Time in ms for rendering: %f\n", Benchmark_Difference(&b) * 1000);
 
 		Time_Calculate();
 		glfwSwapBuffers(manager.graphicsManager->window);
@@ -81,7 +81,7 @@ void Engine_Run(void)
 	Engine_Shutdown();
 }
 
-void Engine_Shutdown(void) 
+void Engine_Shutdown(void)
 {
 	Input_Save(manager.inputs);
 	Input_Shutdown(manager.inputs);

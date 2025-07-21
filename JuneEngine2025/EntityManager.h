@@ -26,14 +26,14 @@ typedef struct EntityManager {
 
 extern EntityManager entityManager;
 
-void	 EntityManager_Init(void);
-void	 EntityManager_Shutdown(void);
-void	 EntityManager_AddDestroyCallback(entityCallback* callback);
-void	 EntityManager_Debug(void);
+void EntityManager_Init(void);
+void EntityManager_Shutdown(void);
+void EntityManager_AddDestroyCallback(entityCallback* callback);
+void EntityManager_Debug(void);
 
 entity_t* Entity_Instantiate(void);
+void Entity_Destroy(entity_t* e);
 entity_t* Entity_GetFromID(const size_t id);
 entity_t* Entity_GetFromName(const char* name);
-void	  Entity_Destroy(entity_t* e);
 
 #endif // !ENTITY_MANAGER

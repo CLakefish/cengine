@@ -21,10 +21,10 @@ typedef struct Serializer {
 	int count, capacity;
 } Serializer;
 
-Serializer* Serializer_Init	(const char*, void* ctx);
-void Serializer_Destroy		(Serializer*);
-void Serializer_Register	(Serializer* , const char*, sfunc, sfunc);
-void Serializer_Load		(Serializer*);
-void Serializer_Write		(Serializer*);
+Serializer* Serializer_Init(const char*, void* ctx);
+void Serializer_Destroy(Serializer*);
+void Serializer_Register(Serializer*, const char*, sfunc, sfunc);
+void Serializer_Load(Serializer*);
+void Serializer_Write(Serializer*);
 
 #endif

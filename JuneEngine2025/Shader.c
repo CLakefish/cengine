@@ -8,9 +8,9 @@
 
 shader_t* Shader_Init(char* vertex, char* fragment)
 {
-	GLuint success;
+	GLuint success = 0;
 
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER); 
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertex, NULL);
 	glCompileShader(vertexShader);
 
@@ -91,7 +91,7 @@ void Shader_SetFloat(const shader_t* shader, const char* name, const float value
 	glUniform1f(glGetUniformLocation(shader->ID, name), value);
 }
 
-void Shader_SetVec3(const shader_t* shader, const char* name, const vec3_t* value) 
+void Shader_SetVec3(const shader_t* shader, const char* name, const vec3_t* value)
 {
 	glUniform3f(glGetUniformLocation(shader->ID, name), value->x, value->y, value->z);
 }

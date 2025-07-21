@@ -4,13 +4,13 @@
 #include "Serializer.h"
 #include "Trace.h"
 
-static void Serializer_Expand(Serializer* serializer) 
+static void Serializer_Expand(Serializer* serializer)
 {
 	serializer->capacity *= 2;
 
 	stype_t* t = (stype_t*)realloc(serializer->types, sizeof(stype_t) * serializer->capacity);
 
-	if (!t) 
+	if (!t)
 	{
 		perror("Unable to reallocate for expansion!");
 		return;
@@ -19,11 +19,11 @@ static void Serializer_Expand(Serializer* serializer)
 	serializer->types = t;
 }
 
-Serializer* Serializer_Init(const char* filePath, void* ctx) 
+Serializer* Serializer_Init(const char* filePath, void* ctx)
 {
 	Serializer* s = (Serializer*)malloc(sizeof(Serializer));
 
-	if (!s) 
+	if (!s)
 	{
 		perror("Could not initialize serializer!");
 		return NULL;
@@ -35,7 +35,7 @@ Serializer* Serializer_Init(const char* filePath, void* ctx)
 	s->types	= (stype_t*)calloc(1, sizeof(stype_t));
 	s->ctx		= ctx;
 
-	if (!s->types) 
+	if (!s->types)
 	{
 		perror("Unable to initialize internal memory for serializer!");
 		return NULL;
@@ -44,16 +44,16 @@ Serializer* Serializer_Init(const char* filePath, void* ctx)
 	return s;
 }
 
-void Serializer_Destroy(Serializer* serializer) 
+void Serializer_Destroy(Serializer* serializer)
 {
 	free(serializer->types);
 	free(serializer);
 	serializer = NULL;
 }
 
-void Serializer_Register(Serializer* serializer, const char* type, sfunc sFunc, sfunc dsFunc) 
+void Serializer_Register(Serializer* serializer, const char* type, sfunc sFunc, sfunc dsFunc)
 {
-	if (serializer == NULL || serializer->types == NULL) 
+	if (serializer == NULL || serializer->types == NULL)
 	{
 		Trace_Log(TR_ERROR, "Serializer uninitialized! Unable to register type of %s in serializer.\n", type);
 		return;
@@ -64,9 +64,9 @@ void Serializer_Register(Serializer* serializer, const char* type, sfunc sFunc, 
 	serializer->types[serializer->count++] = t;
 }
 
-void Serializer_Load(Serializer* serializer) 
+void Serializer_Load(Serializer* serializer)
 {
-	if (serializer->types == NULL) 
+	if (serializer->types == NULL)
 	{
 		Trace_Log(TR_ERROR, "Serializer uninitialized!\n");
 		return;
@@ -125,7 +125,7 @@ void Serializer_Load(Serializer* serializer)
 	serializer->file = NULL;
 }
 
-void Serializer_Write(Serializer* serializer) 
+void Serializer_Write(Serializer* serializer)
 {
 	if (serializer->types == NULL)
 	{

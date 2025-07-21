@@ -14,7 +14,7 @@ typedef struct TimeManager {
 
 extern TimeManager timeManager;
 
-void Time_Init		(void);
-void Time_Calculate	(void);
+void Time_Init(void);
+void Time_Calculate(void);
 
 #endif

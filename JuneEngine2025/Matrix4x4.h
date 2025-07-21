@@ -32,7 +32,7 @@ static inline mat4x4_t mat_Identity(void) {
 
 	return mat;
 }
- 
+
 static inline mat4x4_t mat_Perspective(const float fov, const float aspect, const float zNear, const float zFar)
 {
 	mat4x4_t mat = mat_Identity();
@@ -101,6 +101,16 @@ static inline mat4x4_t mat_Translate(const mat4x4_t m, const vec3_t pos) {
 	return mat;
 }
 
+static inline mat4x4_t mat_Transpose(const mat4x4_t m) {
+	mat4x4_t mat;
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			mat.m[j * 4 + i] = m.m[i * 4 + j];
+		}
+	}
+	return mat;
+}
+
 static inline mat4x4_t mat_Scale(const mat4x4_t m, const vec3_t scale) {
 	mat4x4_t mat = m;
 	mat.m[0] += scale.x;
@@ -138,7 +148,6 @@ static inline mat4x4_t mat_ZRot(const mat4x4_t m, float angle) {
 }
 
 static inline mat4x4_t mat_Rot(const mat4x4_t m, const vec3_t dir) {
-
 	mat4x4_t identity = mat_Identity();
 
 	mat4x4_t matY = mat_YRot(identity, dir.y);

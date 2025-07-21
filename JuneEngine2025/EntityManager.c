@@ -51,7 +51,7 @@ static void EntityManager_CheckExpandCallback(void) {
 	if (entityManager.callbackCount < entityManager.callbackCapacity) return;
 	entityManager.callbackCapacity *= 2;
 	entityCallback* t = (entityCallback*)realloc(entityManager.onDestroy, sizeof(entityCallback) * entityManager.callbackCapacity);
-	
+
 	if (!t) {
 		perror("realloc");
 		return;
@@ -63,8 +63,8 @@ static void EntityManager_CheckExpandCallback(void) {
 void EntityManager_Init(void) {
 	entityManager = (EntityManager){ 0 };
 
-	entityManager.queueCapacity    = INIT_ALLOC;
-	entityManager.dataCapacity	   = INIT_ALLOC;
+	entityManager.queueCapacity = INIT_ALLOC;
+	entityManager.dataCapacity = INIT_ALLOC;
 	entityManager.callbackCapacity = INIT_ALLOC;
 
 	size_t* q = (size_t*)calloc(entityManager.queueCapacity, sizeof(size_t));

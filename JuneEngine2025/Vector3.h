@@ -20,7 +20,7 @@ static inline vec3_t vec3_Sub(const vec3_t a, const vec3_t b) {
 }
 
 static inline vec3_t vec3_Mult(const vec3_t a, const float scalar) {
-	return (vec3_t) { a.x * scalar, a.y * scalar, a.z * scalar };
+	return (vec3_t) { a.x* scalar, a.y* scalar, a.z* scalar };
 }
 
 static inline vec3_t vec3_Div(const vec3_t a, const float scalar) {
@@ -37,7 +37,7 @@ static inline float vec3_Dot(const vec3_t a, const vec3_t b) {
 
 static inline vec3_t vec3_Normalize(const vec3_t t) {
 	float mag = vec3_Mag(t);
-	if (mag == 0) return (vec3_t) { 0,0,0 };
+	if (mag == 0) return (vec3_t) { 0, 0, 0 };
 
 	return vec3_Div(t, mag);
 }

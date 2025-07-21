@@ -12,16 +12,18 @@
 
 #include "Serializer.h"
 
+/// <summary>
+/// If C_NicNic ever reads this, I hope he chokes on an unpitted olive.
+/// </summary>
 typedef struct EngineManager {
 	GraphicsManager* graphicsManager;
-	InputManager*	 inputs;
-
-	Serializer*		 serializer;
+	InputManager* inputs;
+	Serializer* serializer;
 } EngineManager;
 
-EngineManager* Engine_GetInstance	(void);
-void		   Engine_Init			(void);
-void		   Engine_Run			(void);
-void		   Engine_Shutdown		(void);
+EngineManager* Engine_GetInstance(void);
+void           Engine_Init(void);
+void           Engine_Run(void);
+void           Engine_Shutdown(void);
 
 #endif

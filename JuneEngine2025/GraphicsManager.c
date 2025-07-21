@@ -19,7 +19,7 @@ static void Graphics_CameraMovement(GraphicsManager* m) {
 	dX *= sensitivity;
 	dY *= sensitivity;
 
-	yaw   -= dX;
+	yaw -= dX;
 	pitch += dY;
 
 	CLAMP(pitch, -89.9f, 89.9f);
@@ -31,8 +31,8 @@ static void Graphics_CameraMovement(GraphicsManager* m) {
 	};
 
 	m->camera.forward = vec3_Normalize(dir);
-	m->camera.right   = vec3_Normalize(vec3_Cross(m->camera.forward, (vec3_t) { 0, 1, 0 }));
-	m->camera.up	  = vec3_Normalize(vec3_Cross(m->camera.right, m->camera.forward));
+	m->camera.right = vec3_Normalize(vec3_Cross(m->camera.forward, (vec3_t) { 0, 1, 0 }));
+	m->camera.up = vec3_Normalize(vec3_Cross(m->camera.right, m->camera.forward));
 
 	if (Input_Bool(engine->inputs, "W").held) {
 		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * timeManager.deltaTime);
@@ -90,10 +90,10 @@ GraphicsManager* Graphics_Init(void) {
 	glfwSwapInterval(0);
 
 	glfwSetWindowSizeCallback(m->window, GraphicsManager_WindowCallback);
-	m->camera.transform.position	= (vec3_t){ 0, 1, 0 };
-	m->camera.forward				= (vec3_t){ 0, 0, 1.0f };
-	m->camera.up					= (vec3_t){ 0, 1, 0.0f };
-	m->camera.right					= vec3_Normalize(vec3_Cross(m->camera.up, m->camera.forward));
+	m->camera.transform.position = (vec3_t){ 0, 1, 0 };
+	m->camera.forward = (vec3_t){ 0, 0, 1.0f };
+	m->camera.up = (vec3_t){ 0, 1, 0.0f };
+	m->camera.right = vec3_Normalize(vec3_Cross(m->camera.up, m->camera.forward));
 	m->camera.FOV = 75;
 	m->camera.nearPlane = 0.01f;
 	m->camera.farPlane = 1000;
@@ -123,7 +123,7 @@ void Graphics_Render(GraphicsManager* m) {
 	float aspectRatio = (float)width / (float)height;
 
 	mat4x4_t proj = mat_Perspective(m->camera.FOV, aspectRatio, m->camera.nearPlane, m->camera.farPlane);
-	mat4x4_t view = mat_LookAt     (m->camera.transform.position, m->camera.forward, m->camera.right, m->camera.up);
+	mat4x4_t view = mat_LookAt(m->camera.transform.position, m->camera.forward, m->camera.right, m->camera.up);
 
 	Graphics_CameraMovement(m);
 

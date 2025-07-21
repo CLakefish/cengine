@@ -68,8 +68,8 @@ inline void name##_Free(name* arr) { \
 #endif // !DYNAMIC_ARRAY
 
 #ifdef DA_COMMON_TYPES
-	GEN_DYNAMIC_ARRAY_TYPE(DAchar, char)
-	GEN_DYNAMIC_ARRAY_TYPE(DAint, int)
-	GEN_DYNAMIC_ARRAY_TYPE(DAfloat, float)
-	GEN_DYNAMIC_ARRAY_TYPE(DAdouble, double)
+GEN_DYNAMIC_ARRAY_TYPE(DAchar, char)
+GEN_DYNAMIC_ARRAY_TYPE(DAint, int)
+GEN_DYNAMIC_ARRAY_TYPE(DAfloat, float)
+GEN_DYNAMIC_ARRAY_TYPE(DAdouble, double)
 #endif

@@ -47,17 +47,17 @@ static void Trace_Log(TraceType type, const char* format, ...) {
 	const char* prefix = "\0";
 
 	switch (type) {
-		default: 
-			break;
-		case TR_WARNING:
-			prefix = "[WARNING] \0";
-			break;
-		case TR_SUCCESS:
-			prefix = "[SUCCESS] \0";
-			break;
-		case TR_ERROR:
-			prefix = "[ERROR] \0";
-			break;
+	default:
+		break;
+	case TR_WARNING:
+		prefix = "[WARNING] \0";
+		break;
+	case TR_SUCCESS:
+		prefix = "[SUCCESS] \0";
+		break;
+	case TR_ERROR:
+		prefix = "[ERROR] \0";
+		break;
 	}
 
 	fprintf(Trace.file, prefix);
@@ -65,8 +65,8 @@ static void Trace_Log(TraceType type, const char* format, ...) {
 
 	va_list args;
 	va_start(args, format);
-		if (Trace.print) vprintf(format, args);
-		vfprintf(Trace.file, format, args);
+	if (Trace.print) vprintf(format, args);
+	vfprintf(Trace.file, format, args);
 	va_end(args);
 }
 #endif
