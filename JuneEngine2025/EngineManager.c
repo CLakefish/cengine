@@ -12,8 +12,6 @@ EngineManager* Engine_GetInstance(void) {
 	return &manager;
 }
 
-gizmo_t* gizmo3;
-
 void Engine_Init(void)
 {
 	glfwInit();
@@ -24,12 +22,11 @@ void Engine_Init(void)
 	Benchmark_Init();
 	Time_Init();
 	Trace_Init(TR_INIT_PRINT);
+	EntityManager_Init();
 
 	manager.graphicsManager = Graphics_Init();
 	manager.serializer = Serializer_Init("engineSerialized.bin", NULL);
 	manager.inputs = Input_Init();
-
-	EntityManager_Init();
 
 	Input_Load(manager.inputs);
 
@@ -43,15 +40,17 @@ void Engine_Init(void)
 	Graphics_SetupGLAD();
 	GizmoRenderer_Init();
 
-	gizmo3 = Gizmo_CreateBox((vec3_t) { 0, 0, 0 }, (vec3_t) { 1, 1, 1 }, (vec3_t) { 1, 0, 1, 1 });
-	GizmoRenderer_AddGizmo(gizmo3);
-
 	Engine_Run();
 }
 
 void Engine_Run(void)
 {
 	while (!glfwWindowShouldClose(manager.graphicsManager->window)) {
+
+		Benchmarker b;
+		Benchmark_Init();
+		Benchmark_Start(&b);
+
 		glfwPollEvents();
 		Input_CalculateEvents(manager.graphicsManager->window, manager.inputs);
 
@@ -63,19 +62,13 @@ void Engine_Run(void)
 			Input_NamedInput(manager.inputs, "mousePos")->disabled = disabled;
 		}
 
-		gizmo3->transform.rotation = vec3_Add(gizmo3->transform.rotation, vec3_Mult((vec3_t) { 2, 1, 3 }, timeManager.deltaTime));
-
-		Benchmarker b;
-		Benchmark_Init();
-		Benchmark_Start(&b);
-
 		Graphics_Render(manager.graphicsManager);
-
-		Benchmark_End(&b);
-		printf("Time in ms for rendering: %f\n", Benchmark_Difference(&b) * 1000);
 
 		Time_Calculate();
 		glfwSwapBuffers(manager.graphicsManager->window);
+
+		Benchmark_End(&b);
+		printf("Time in ms for rendering: %f\n", Benchmark_Difference(&b) * 1000);
 	}
 
 	Engine_Shutdown();
@@ -84,8 +77,8 @@ void Engine_Run(void)
 void Engine_Shutdown(void)
 {
 	Input_Save(manager.inputs);
-	Input_Shutdown(manager.inputs);
 
+	Input_Shutdown(manager.inputs);
 	EntityManager_Shutdown();
 	Graphics_Shutdown(manager.graphicsManager);
 
