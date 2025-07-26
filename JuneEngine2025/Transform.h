@@ -4,6 +4,7 @@
 #include "Vector3.h"
 
 typedef struct transform_t {
+	size_t ID;
 	vec3_t position, rotation, scale;
 } transform_t;
 

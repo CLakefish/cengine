@@ -10,7 +10,10 @@
 #include "InputManager.h"
 #include "GraphicsManager.h"
 
+#include "SparseSet.h"
 #include "Serializer.h"
+
+GEN_SPARSE_SET(transformSet_t, transform_t)
 
 /// <summary>
 /// If C_NicNic ever reads this, I hope he chokes on an unpitted olive.
@@ -19,6 +22,8 @@ typedef struct EngineManager {
 	GraphicsManager* graphicsManager;
 	InputManager* inputs;
 	Serializer* serializer;
+
+	transformSet_t transforms;
 } EngineManager;
 
 EngineManager* Engine_GetInstance(void);

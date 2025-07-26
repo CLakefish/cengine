@@ -118,27 +118,27 @@ void GizmoRenderer_Init(void) {
 	Gizmo_Bind(grid);
 	GizmoRenderer_GenerateGrid((vec3_t) { 0, 0, 0 });
 
-	size_t instances = 1000;
-	size_t total = instances * instances;
-	mat4x4_t* totalInstances = (mat4x4_t*)calloc(total, sizeof(mat4x4_t));
-	mat4x4_t  identity		 = mat_Identity();
+	//size_t instances = 1000;
+	//size_t total = instances * instances;
+	//mat4x4_t* totalInstances = (mat4x4_t*)calloc(total, sizeof(mat4x4_t));
+	//mat4x4_t  identity		 = mat_Identity();
 
-	if (!totalInstances) {
-		perror("calloc\n");
-		return;
-	}
+	//if (!totalInstances) {
+	//	perror("calloc\n");
+	//	return;
+	//}
 
-	float half = instances * 0.5f;
-	for (int i = -half; i < half; ++i)
-	{
-		for (int j = -half; j < half; ++j)
-		{
-			size_t index = (i + half) * instances + (j + half);
-			totalInstances[index] = mat_Transpose(mat_Translate(identity, (vec3_t) { i, tan(i) * tan(j), j }));
-		}
-	}
+	//float half = instances * 0.5f;
+	//for (int i = -half; i < half; ++i)
+	//{
+	//	for (int j = -half; j < half; ++j)
+	//	{
+	//		size_t index = (i + half) * instances + (j + half);
+	//		totalInstances[index] = mat_Transpose(mat_Translate(identity, (vec3_t) { i, tan(i) * tan(j), j }));
+	//	}
+	//}
 
-	gizmoRenderer.instance = Gizmo_CreateBoxInstance((vec3_t) { 0,0,0,1 }, (vec3_t) { 1,1,1,1 }, (vec3_t) { 0.5f,0.25f,0.5f,0.25f }, total, totalInstances);
+	//gizmoRenderer.instance = Gizmo_CreateBoxInstance((vec3_t) { 0,0,0,1 }, (vec3_t) { 1,1,1,1 }, (vec3_t) { 0.5f,0.25f,0.5f,0.25f }, total, totalInstances);
 
 	// Shader
 	gizmoRenderer.shader		 = Shader_Init(FileToString("gizmo.vert"),		   FileToString("gizmo.frag"));
@@ -183,16 +183,16 @@ void GizmoRenderer_Shutdown(void) {
 }
 
 void GizmoRenderer_Render(const mat4x4_t* view, const mat4x4_t* proj, const vec3_t pos) {
-	Shader_Use(gizmoRenderer.instanceShader);
+	//Shader_Use(gizmoRenderer.instanceShader);
 
-	Shader_SetMat4(gizmoRenderer.instanceShader, "view", view);
-	Shader_SetMat4(gizmoRenderer.instanceShader, "proj", proj);
+	//Shader_SetMat4(gizmoRenderer.instanceShader, "view", view);
+	//Shader_SetMat4(gizmoRenderer.instanceShader, "proj", proj);
 
-	glBindVertexArray(gizmoRenderer.instance->gizmo->VAO);
-	glDrawArrays(GL_LINES, 0, gizmoRenderer.instance->gizmo->vertexCount);
+	//glBindVertexArray(gizmoRenderer.instance->gizmo->VAO);
+	//glDrawArrays(GL_LINES, 0, gizmoRenderer.instance->gizmo->vertexCount);
 
-	glBindVertexArray(gizmoRenderer.instance->VAO);
-	glDrawArraysInstanced(GL_LINES, 0, gizmoRenderer.instance->gizmo->vertexCount, gizmoRenderer.instance->count);
+	//glBindVertexArray(gizmoRenderer.instance->VAO);
+	//glDrawArraysInstanced(GL_LINES, 0, gizmoRenderer.instance->gizmo->vertexCount, gizmoRenderer.instance->count);
 
 	Shader_Use(gizmoRenderer.shader);
 

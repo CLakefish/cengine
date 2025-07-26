@@ -180,6 +180,7 @@
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Serializer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SparseSet.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="stdinc.h" />
     <ClInclude Include="TimeManager.h" />
