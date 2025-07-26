@@ -4,8 +4,8 @@
 #include "Vector3.h"
 
 typedef struct transform_t {
-	size_t ID;
 	vec3_t position, rotation, scale;
+	size_t ID;
 } transform_t;
 
 static vec3_t Transform_GetForward(const transform_t* t) {
