@@ -4,10 +4,10 @@
 #include "Gizmo.h"
 #include "Shader.h"
 
-#define GRID_WIDTH 65
-#define GRID_LENGTH 65
+#define GRID_WIDTH 80
+#define GRID_LENGTH 80
 #define GRID_SPACING 15.0f
-#define GRID_FOG 800
+#define GRID_FOG 4500
 #define GRID_COLOR 1, 1, 1, 0.5
 
 #define DIR_SPACING 5000

@@ -9,26 +9,28 @@
 #include "TimeManager.h"
 #include "InputManager.h"
 #include "GraphicsManager.h"
+#include "EntityManager.h"
+#include "TransformManager.h"
+#include "BehaviorManager.h"
 
-#include "SparseSet.h"
 #include "Serializer.h"
-
-GEN_SPARSE_SET(transformSet_t, transform_t)
 
 /// <summary>
 /// If C_NicNic ever reads this, I hope he chokes on an unpitted olive.
 /// </summary>
 typedef struct EngineManager {
-	GraphicsManager* graphicsManager;
-	InputManager* inputs;
-	Serializer* serializer;
+	GraphicsManager*  graphicsManager;
+	EntityManager*    entityManager;
+	TransformManager* transformManager;
+	BehaviorManager*  behaviorManager;
 
-	transformSet_t transforms;
+	InputManager* inputs;
+	Serializer*   serializer;
 } EngineManager;
 
 EngineManager* Engine_GetInstance(void);
-void           Engine_Init(void);
-void           Engine_Run(void);
-void           Engine_Shutdown(void);
+void Engine_Init(void);
+void Engine_Run(void);
+void Engine_Shutdown(void);
 
 #endif

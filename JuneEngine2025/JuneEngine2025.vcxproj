@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BehaviorManager.c" />
     <ClCompile Include="EngineManager.c" />
     <ClCompile Include="EntityManager.c" />
     <ClCompile Include="Gizmo.c" />
@@ -163,8 +164,11 @@
     <ClCompile Include="src\libraries\glad.c" />
     <ClCompile Include="StateMachine.c" />
     <ClCompile Include="TimeManager.c" />
+    <ClCompile Include="TransformManager.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behavior.h" />
+    <ClInclude Include="BehaviorManager.h" />
     <ClInclude Include="Benchmark.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DynamicArray.h" />
@@ -186,6 +190,7 @@
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Trace.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="TransformManager.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>

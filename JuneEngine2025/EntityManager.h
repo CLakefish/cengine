@@ -15,6 +15,10 @@ typedef struct EntityManager {
 	size_t* nextQueue;
 	size_t queueCount, queueCapacity;
 
+	//// Destruction Queue (cant do in the middle of an iteration?)
+	//size_t* destroyQueue;
+	//size_t destroyCount, destroyCapacity;
+
 	// Data
 	entity_t* data;
 	size_t dataCount, dataCapacity;
@@ -24,16 +28,14 @@ typedef struct EntityManager {
 	size_t callbackCount, callbackCapacity;
 } EntityManager;
 
-extern EntityManager entityManager;
+EntityManager* EntityManager_Init(void);
+void EntityManager_Shutdown(EntityManager* manager);
+void EntityManager_AddDestroyCallback(EntityManager* manager, entityCallback* callback);
+void EntityManager_Debug(EntityManager* manager);
 
-void EntityManager_Init(void);
-void EntityManager_Shutdown(void);
-void EntityManager_AddDestroyCallback(entityCallback* callback);
-void EntityManager_Debug(void);
-
-entity_t* Entity_Instantiate(void);
-void Entity_Destroy(entity_t* e);
-entity_t* Entity_GetFromID(const size_t id);
-entity_t* Entity_GetFromName(const char* name);
+entity_t* Entity_Instantiate(EntityManager* manager);
+void Entity_Destroy(EntityManager* manager, entity_t* e);
+entity_t* Entity_GetFromID(EntityManager* manager, const size_t id);
+entity_t* Entity_GetFromName(EntityManager* manager, const char* name);
 
 #endif // !ENTITY_MANAGER

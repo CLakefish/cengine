@@ -5,8 +5,9 @@
 #include "EngineManager.h"
 #include "InputManager.h"
 
-float pitch, yaw = 90;
-float moveSpeed = 25;
+static float pitch = 0.0f;
+static float yaw   = -90.0f;
+static float moveSpeed = 25;
 
 static void Graphics_CameraMovement(GraphicsManager* m) {
 	EngineManager* engine = Engine_GetInstance();
@@ -19,48 +20,45 @@ static void Graphics_CameraMovement(GraphicsManager* m) {
 	dX *= sensitivity;
 	dY *= sensitivity;
 
-	yaw -= dX;
+	yaw   += dX;
 	pitch += dY;
 
 	CLAMP(pitch, -89.9f, 89.9f);
 
-	vec3_t dir = {
-		cosf(yaw * DEG2RAD) * cosf(pitch * DEG2RAD),
-		sinf(pitch * DEG2RAD),
-		sinf(yaw * DEG2RAD) * cosf(pitch * DEG2RAD),
-	};
+	// incorrect eulerAngles
+	m->camera.transform.rotation = (vec3_t){ pitch, yaw, 0 };
 
-	m->camera.forward = vec3_Normalize(dir);
-	m->camera.right = vec3_Normalize(vec3_Cross(m->camera.forward, (vec3_t) { 0, 1, 0 }));
-	m->camera.up = vec3_Normalize(vec3_Cross(m->camera.right, m->camera.forward));
+	vec3_t forward = Transform_GetForward(&m->camera.transform);
+	vec3_t right   = Transform_GetRight(&m->camera.transform);
+	vec3_t up	   = Transform_GetUp(&m->camera.transform);
 
 	if (Input_Bool(engine->inputs, "W").held) {
-		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(forward, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "S").held) {
-		vec3_t dir = vec3_Mult(m->camera.forward, moveSpeed * timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(forward, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "A").held) {
-		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(right, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "D").held) {
-		vec3_t dir = vec3_Mult(m->camera.right, moveSpeed * timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(right, moveSpeed * timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "space").held) {
-		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(up, moveSpeed* timeManager.deltaTime);
 		m->camera.transform.position = vec3_Add(m->camera.transform.position, dir);
 	}
 
 	if (Input_Bool(engine->inputs, "leftShift").held) {
-		vec3_t dir = vec3_Mult((vec3_t) { 0, 1, 0 }, moveSpeed* timeManager.deltaTime);
+		vec3_t dir = vec3_Mult(up, moveSpeed* timeManager.deltaTime);
 		m->camera.transform.position = vec3_Sub(m->camera.transform.position, dir);
 	}
 }
@@ -70,7 +68,7 @@ static void GraphicsManager_WindowCallback(GLFWwindow* window, int width, int he
 	glViewport(0, 0, width, height);
 }
 
-GraphicsManager* Graphics_Init(void) {
+GraphicsManager* GraphicsManager_Init(void) {
 	GraphicsManager* m = (GraphicsManager*)malloc(sizeof(GraphicsManager));
 
 	if (!m) {
@@ -91,17 +89,14 @@ GraphicsManager* Graphics_Init(void) {
 
 	glfwSetWindowSizeCallback(m->window, GraphicsManager_WindowCallback);
 	m->camera.transform.position = (vec3_t){ 0, 1, 0 };
-	m->camera.forward = (vec3_t){ 0, 0, 1.0f };
-	m->camera.up = (vec3_t){ 0, 1, 0.0f };
-	m->camera.right = vec3_Normalize(vec3_Cross(m->camera.up, m->camera.forward));
-	m->camera.FOV = 75;
+	m->camera.FOV		= 75;
 	m->camera.nearPlane = 0.01f;
 	m->camera.farPlane = 1000;
 
 	return m;
 }
 
-void Graphics_SetupGLAD(void) {
+void GraphicsManager_SetupGLAD(void) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
@@ -110,27 +105,31 @@ void Graphics_SetupGLAD(void) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Graphics_Clear(GraphicsManager* m) {
+void GraphicsManager_Clear(GraphicsManager* m) {
 	glClearColor(0.1f, 0, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Graphics_Render(GraphicsManager* m) {
-	Graphics_Clear(m);
+void GraphicsManager_Render(GraphicsManager* m) {
+	GraphicsManager_Clear(m);
 
 	int width, height;
 	glfwGetWindowSize(m->window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
+	
+	vec3_t forward	= Transform_GetForward(&m->camera.transform);
+	vec3_t right	= Transform_GetRight(&m->camera.transform);
+	vec3_t up		= Transform_GetUp(&m->camera.transform);
 
-	mat4x4_t proj = mat_Perspective(m->camera.FOV, aspectRatio, m->camera.nearPlane, m->camera.farPlane);
-	mat4x4_t view = mat_LookAt(m->camera.transform.position, m->camera.forward, m->camera.right, m->camera.up);
+	mat4x4_t proj	= mat_Perspective(m->camera.FOV, aspectRatio, m->camera.nearPlane, m->camera.farPlane);
+	mat4x4_t view	= mat_LookAt(m->camera.transform.position, forward, right, up);
 
 	Graphics_CameraMovement(m);
 
 	GizmoRenderer_Render(&view, &proj, m->camera.transform.position);
 }
 
-void Graphics_Shutdown(GraphicsManager* m) {
+void GraphicsManager_Shutdown(GraphicsManager* m) {
 	glfwDestroyWindow(m->window);
 	m->window = NULL;
 

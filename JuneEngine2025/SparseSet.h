@@ -11,7 +11,7 @@ typedef struct name { \
 	size_t** sparse; \
 	size_t sparseCount, sparseCapacity; \
 	size_t pageSize; \
-	type* dense; \
+	type** dense; \
 	size_t denseCount, denseCapacity; \
 } name; \
 \
@@ -30,7 +30,7 @@ static name* name##_Init(size_t pageSize, size_t sparseCapacity, size_t denseCap
 	\
 	for (size_t i = 0; i < pages; ++i) sparse[i] = NULL; \
 	\
-	type* dense = (type*)calloc(denseCapacity, sizeof(type)); \
+	type** dense = (type**)calloc(denseCapacity, sizeof(type*)); \
 	if (!dense) { \
 		perror("calloc\n"); \
 		return NULL; \
@@ -45,9 +45,13 @@ static name* name##_Init(size_t pageSize, size_t sparseCapacity, size_t denseCap
 }; \
 \
 static void name##_Free(name* set) { \
+	if (set == NULL) return; \
 	size_t pageTotal = (set->sparseCapacity + set->pageSize - 1) / set->pageSize; \
 	for (size_t i = 0; i < pageTotal; ++i) { \
 		free(set->sparse[i]); \
+	}; \
+	for (size_t i = 0; i < set->denseCount; ++i) { \
+		free(set->dense[i]); \
 	}; \
 	\
 	free(set->sparse); \
@@ -76,7 +80,7 @@ static void name##_ExpandSparse(name* set) { \
 static void name##_ExpandDense(name* set) { \
 	if (!set) return;\
 	set->denseCapacity *= 2; \
-	type* t = (type*)realloc(set->dense, set->denseCapacity * sizeof(type)); \
+	type** t = (type**)realloc(set->dense, set->denseCapacity * sizeof(type*)); \
 	if (!t) { \
 		perror("realloc\n"); \
 		return; \
@@ -95,7 +99,7 @@ static int name##_Contains(name* set, size_t ID) { \
 	size_t denseInd = set->sparse[page][ind]; \
 	if (denseInd == (size_t)(-1) || denseInd >= set->denseCount) return 0; \
 	\
-	return (set->dense[denseInd].ID == ID) ? 1 : 0; \
+	return (set->dense[denseInd]->ID == ID) ? 1 : 0; \
 }; \
 \
 static type* name##_Get(name* set, size_t ID) { \
@@ -104,15 +108,15 @@ static type* name##_Get(name* set, size_t ID) { \
 	\
 	size_t page = ID / set->pageSize; \
 	size_t ind  = ID % set->pageSize; \
-	if (page >= set->sparseCapacity || set->sparse[page] == NULL) return 0; \
+	if (page >= set->sparseCapacity / set->pageSize || set->sparse[page] == NULL) return 0; \
 	\
 	size_t denseInd = set->sparse[page][ind]; \
 	if (denseInd == (size_t)(-1) || denseInd >= set->denseCount) return 0; \
 	\
-	return &set->dense[denseInd]; \
+	return set->dense[denseInd]; \
 }; \
 \
-static type* name##_Insert(name* set, type item, size_t ID) { \
+static void name##_Insert(name* set, type* item, size_t ID) { \
 	if (name##_Contains(set, ID)) { \
 		printf("Sparse set already contains ID of %zu\n", ID);\
 		return NULL; \
@@ -130,7 +134,7 @@ static type* name##_Insert(name* set, type item, size_t ID) { \
 		}\
 		set->sparse[page] = t; \
 	}\
-	item.ID = ID; \
+	item->ID = ID; \
 	\
 	if (set->denseCount >= set->denseCapacity) name##_ExpandDense(set); \
     size_t prev = set->denseCount; \
@@ -138,7 +142,6 @@ static type* name##_Insert(name* set, type item, size_t ID) { \
 	set->sparse[page][ind] = prev; \
 	set->denseCount++; \
 	set->sparseCount++; \
-	return &set->dense[prev]; \
 }; \
 \
 static void name##_Remove(name* set, size_t ID) { \
@@ -150,14 +153,14 @@ static void name##_Remove(name* set, size_t ID) { \
 	size_t ind  = ID % set->pageSize; \
 	size_t denseInd = set->sparse[page][ind]; \
 	\
-	type last = set->dense[set->denseCount - 1]; \
+	type* last = set->dense[set->denseCount - 1]; \
 	set->dense[set->denseCount - 1] = set->dense[denseInd]; \
 	set->dense[denseInd]			= last; \
 	set->denseCount--; \
 	set->sparseCount--; \
 	\
-	size_t lastPage = last.ID / set->pageSize; \
-	size_t lastInd  = last.ID % set->pageSize; \
+	size_t lastPage = last->ID / set->pageSize; \
+	size_t lastInd  = last->ID % set->pageSize; \
 	\
 	set->sparse[page][ind]		   = set->sparse[lastPage][lastInd]; \
 	set->sparse[lastPage][lastInd] = denseInd; \

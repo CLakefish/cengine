@@ -28,15 +28,17 @@ static void GizmoRenderer_Expand(void) {
 
 static void GizmoRenderer_RenderGrid(const vec3_t pos) {
 	Shader_SetFloat(gizmoRenderer.shader, "fogDist", GRID_FOG);
-	Shader_SetVec3(gizmoRenderer.shader, "camPos", &(vec3_t){0, 0, 0});
+	Shader_SetVec3(gizmoRenderer.shader, "camPos", &(vec3_t){pos.x, 0, pos.z});
 
 	float totalSpace = GRID_SPACING * 2.0f;
-	grid->transform.position = (vec3_t){ (int)(pos.x / totalSpace) * totalSpace, 0, (int)(pos.z / totalSpace) * totalSpace };
+	grid->transform.position = (vec3_t){ (int)((pos.x / GRID_SPACING) + 0.5f) * totalSpace, 0, (int)((pos.z / GRID_SPACING) + 0.5f) * totalSpace };
 
 	mat4x4_t model = mat_Identity();
 	model = mat_Scale(model, grid->transform.scale);
 	model = mat_Rot(model, grid->transform.rotation);
 	model = mat_Translate(model, grid->transform.position);
+
+	// grid->transform.rotation = vec3_Add(grid->transform.rotation, (vec3_t) { 0, timeManager.deltaTime * 10, 0 });
 
 	Shader_SetMat4(gizmoRenderer.shader, "model", &model);
 
@@ -97,7 +99,7 @@ void GizmoRenderer_Init(void) {
 
 	// Infinte grid
 	int cell = GRID_WIDTH * GRID_LENGTH;
-	int inds = cell * 4;
+	int inds = cell * 4 + 2;
 
 	grid = (gizmo_t*)malloc(sizeof(gizmo_t));
 
@@ -168,16 +170,16 @@ void GizmoRenderer_Shutdown(void) {
 		free(g);
 	}
 
-	glDeleteVertexArrays(1, &gizmoRenderer.instance->gizmo->VAO);
-	glDeleteBuffers(1, &gizmoRenderer.instance->gizmo->VBO);
+	//glDeleteVertexArrays(1, &gizmoRenderer.instance->gizmo->VAO);
+	//glDeleteBuffers(1, &gizmoRenderer.instance->gizmo->VBO);
 
-	glDeleteVertexArrays(1, &gizmoRenderer.instance->VAO);
-	glDeleteBuffers(1, &gizmoRenderer.instance->VBO);
+	//glDeleteVertexArrays(1, &gizmoRenderer.instance->VAO);
+	//glDeleteBuffers(1, &gizmoRenderer.instance->VBO);
 
-	free(gizmoRenderer.instance->gizmo->vertices);
-	free(gizmoRenderer.instance->gizmo);
-	free(gizmoRenderer.instance->transformations);
-	free(gizmoRenderer.instance);
+	//free(gizmoRenderer.instance->gizmo->vertices);
+	//free(gizmoRenderer.instance->gizmo);
+	//free(gizmoRenderer.instance->transformations);
+	//free(gizmoRenderer.instance);
 
 	free(gizmoRenderer.gizmos);
 }
@@ -275,10 +277,10 @@ void GizmoRenderer_GenerateDir(const vec3_t position) {
 }
 
 void GizmoRenderer_GenerateGrid(vec3_t pos) {
-	float xOffset = (int)(-pos.x / GRID_SPACING) * GRID_SPACING;
-	float zOffset = (int)(-pos.z / GRID_SPACING) * GRID_SPACING;
+	float xOffset  = (int)(-pos.x / GRID_SPACING) * GRID_SPACING;
+	float zOffset  = (int)(-pos.z / GRID_SPACING) * GRID_SPACING;
 
-	int halfWidth = (int)(GRID_WIDTH / 2.0f);
+	int halfWidth  = (int)(GRID_WIDTH / 2.0f);
 	int halfLength = (int)(GRID_LENGTH / 2.0f);
 	int index = 0;
 

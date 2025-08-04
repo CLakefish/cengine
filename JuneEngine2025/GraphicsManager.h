@@ -12,10 +12,10 @@ typedef struct GraphicsManager {
 	camera_t camera;
 } GraphicsManager;
 
-GraphicsManager* Graphics_Init(void);
-void             Graphics_SetupGLAD(void);
-void             Graphics_Clear(GraphicsManager* m);
-void             Graphics_Render(GraphicsManager* m);
-void             Graphics_Shutdown(GraphicsManager* m);
+GraphicsManager* GraphicsManager_Init(void);
+void GraphicsManager_SetupGLAD(void);
+void GraphicsManager_Clear(GraphicsManager* m);
+void GraphicsManager_Render(GraphicsManager* m);
+void GraphicsManager_Shutdown(GraphicsManager* m);
 
 #endif

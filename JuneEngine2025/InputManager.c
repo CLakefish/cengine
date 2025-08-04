@@ -30,9 +30,7 @@ static int strnccmp(const char* a, const char* b) {
 
 #pragma region Serialization
 
-static void Input_Serialize(void* ctx) {
-	InputManager* m = (InputManager*)ctx;
-
+static void Input_Serialize(InputManager* m) {
 	fwrite(&m->count, sizeof(int), 1, m->serializer->file);
 
 	for (int i = 0; i < m->count; ++i) {
@@ -47,9 +45,7 @@ static void Input_Serialize(void* ctx) {
 	}
 }
 
-static void Input_Deserialize(void* ctx) {
-	InputManager* m = (InputManager*)ctx;
-
+static void Input_Deserialize(InputManager* m) {
 	int count = -1;
 	fread(&count, sizeof(count), 1, m->serializer->file);
 

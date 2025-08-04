@@ -25,32 +25,32 @@
     <Filter Include="Core\Components">
       <UniqueIdentifier>{3245da0b-7ed2-4a80-b9cc-8a68dd082376}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Managers">
-      <UniqueIdentifier>{f3c17aa1-dcd2-488d-95c0-a658099c25e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Managers\Rendering">
-      <UniqueIdentifier>{0f6b5895-b32a-4cb9-8f46-c968511ad4c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Project Utilities\Time">
-      <UniqueIdentifier>{4feef615-0447-499c-9ee3-d3e50196dc73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Managers\Input">
-      <UniqueIdentifier>{ac443957-11d6-43d8-855d-18e2eebc8da6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project Utilities\File IO">
       <UniqueIdentifier>{f215aadf-7162-4e8a-880b-ccdab81c4cf6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Project Utilities\Serialization">
       <UniqueIdentifier>{f86127ec-78cb-4347-b062-57c29e20c888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Entity">
+      <UniqueIdentifier>{2c9a9585-4572-43e4-aa31-0708194c5fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{ac443957-11d6-43d8-855d-18e2eebc8da6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Systems">
+      <UniqueIdentifier>{4f9d88c2-1061-4f65-a906-ebbded8bc9da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Systems\Rendering">
+      <UniqueIdentifier>{0f6b5895-b32a-4cb9-8f46-c968511ad4c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Components\Gizmos">
+      <UniqueIdentifier>{7bb54fbf-7434-4d0a-81f3-9ffe13d1a07d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core\Shaders">
       <UniqueIdentifier>{438f313c-8496-48c0-a765-fcab857daa4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\Managers\Rendering\Gizmos">
-      <UniqueIdentifier>{7bb54fbf-7434-4d0a-81f3-9ffe13d1a07d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Managers\Entity">
-      <UniqueIdentifier>{2c9a9585-4572-43e4-aa31-0708194c5fed}</UniqueIdentifier>
+    <Filter Include="Core\Systems\Time">
+      <UniqueIdentifier>{4feef615-0447-499c-9ee3-d3e50196dc73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,9 +69,6 @@
     <ClInclude Include="Trace.h">
       <Filter>Project Utilities\Trace</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsManager.h">
-      <Filter>Core\Managers\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>Project Utilities\Mathematics</Filter>
     </ClInclude>
@@ -88,10 +85,10 @@
       <Filter>Core\Components</Filter>
     </ClInclude>
     <ClInclude Include="TimeManager.h">
-      <Filter>Project Utilities\Time</Filter>
+      <Filter>Core\Systems\Time</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Core\Managers\Input</Filter>
+      <Filter>Core\Input</Filter>
     </ClInclude>
     <ClInclude Include="FileIO.h">
       <Filter>Project Utilities\File IO</Filter>
@@ -103,22 +100,34 @@
       <Filter>Core\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="Gizmo.h">
-      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+      <Filter>Core\Components\Gizmos</Filter>
     </ClInclude>
     <ClInclude Include="EngineManager.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="GizmoRenderer.h">
-      <Filter>Core\Managers\Rendering\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Core\Managers\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Core\Managers\Entity</Filter>
+      <Filter>Core\Entity</Filter>
     </ClInclude>
     <ClInclude Include="SparseSet.h">
       <Filter>Project Utilities\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="GizmoRenderer.h">
+      <Filter>Core\Systems\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsManager.h">
+      <Filter>Core\Systems\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformManager.h">
+      <Filter>Core\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Core\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorManager.h">
+      <Filter>Core\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Behavior.h">
+      <Filter>Core\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,35 +135,41 @@
     <ClCompile Include="StateMachine.c">
       <Filter>Project Utilities\Statemachine</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsManager.c">
-      <Filter>Core\Managers\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\libraries\glad.c">
       <Filter>Project Utilities</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.c">
-      <Filter>Project Utilities\Time</Filter>
+      <Filter>Core\Systems\Time</Filter>
     </ClCompile>
     <ClCompile Include="Serializer.c">
       <Filter>Project Utilities\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.c">
-      <Filter>Core\Managers\Input</Filter>
+      <Filter>Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="Shader.c">
       <Filter>Core\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Gizmo.c">
-      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+      <Filter>Core\Components\Gizmos</Filter>
     </ClCompile>
     <ClCompile Include="EngineManager.c">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="GizmoRenderer.c">
-      <Filter>Core\Managers\Rendering\Gizmos</Filter>
+      <Filter>Core\Systems\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsManager.c">
+      <Filter>Core\Systems\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="EntityManager.c">
-      <Filter>Core\Managers\Entity</Filter>
+      <Filter>Core\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformManager.c">
+      <Filter>Core\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="BehaviorManager.c">
+      <Filter>Core\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
